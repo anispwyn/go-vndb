@@ -1,3 +1,5 @@
+# this is a fork from github.com/tuihub/go-vndb, i hardfork due to my own needs
+
 # go-vndb
 
 Zero dependency Go api library for [VNDB.org API v2](https://api.vndb.org/kana)
@@ -10,7 +12,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/tuihub/go-vndb"
+	"github.com/anispwyn/go-vndb"
 )
 
 func main() {
