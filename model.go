@@ -391,7 +391,7 @@ type Vn struct {
 	Title      interface{} `json:"title"`
 	Languages  interface{} `json:"languages"`
 	Votecount  interface{} `json:"votecount"`
-	Developers struct {
+	Developers []struct {
 		Aliases     interface{} `json:"aliases"`
 		Lang        interface{} `json:"lang"`
 		Type        interface{} `json:"type"`
