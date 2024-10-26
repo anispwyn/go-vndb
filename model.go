@@ -1,5 +1,36 @@
 package vndb
 
+type (
+	Spoiler   int
+	Sexual    int
+	Violence  int
+	DevStatus int
+)
+
+const (
+	SpoilerNone Spoiler = iota
+	SpoilerLight
+	SpoilerFull
+)
+
+const (
+	SexualSafe Sexual = iota
+	SexualSuggestive
+	SexualErotic
+)
+
+const (
+	ViolenceNone Violence = iota
+	ViolenceLight
+	ViolenceExtreme
+)
+
+const (
+	Finished DevStatus = iota
+	InDevelopment
+	Cancelled
+)
+
 type PatchUList struct {
 	Vote        int      `json:"vote,omitempty"`
 	Notes       string   `json:"notes,omitempty"`
@@ -82,111 +113,43 @@ type Response struct {
 }
 
 type Tag struct {
-	Name        interface{} `json:"name"`
-	Description interface{} `json:"description"`
-	Applicable  interface{} `json:"applicable"`
-	ID          interface{} `json:"id"`
-	VnCount     interface{} `json:"vn_count"`
-	Category    interface{} `json:"category"`
-	Searchable  interface{} `json:"searchable"`
-	Aliases     interface{} `json:"aliases"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Applicable  bool     `json:"applicable"`
+	ID          string   `json:"id"`
+	VnCount     int      `json:"vn_count"`
+	Category    string   `json:"category"`
+	Searchable  string   `json:"searchable"`
+	Aliases     []string `json:"aliases"`
 }
 type Character struct {
-	Birthday    interface{} `json:"birthday"`
-	Aliases     interface{} `json:"aliases"`
-	Original    interface{} `json:"original"`
-	Height      interface{} `json:"height"`
-	Age         interface{} `json:"age"`
-	Description interface{} `json:"description"`
-	Traits      struct {
-		Spoiler interface{} `json:"spoiler"`
-		Lie     interface{} `json:"lie"`
-	} `json:"traits"`
-	Waist interface{} `json:"waist"`
-	Name  interface{} `json:"name"`
-	Cup   interface{} `json:"cup"`
-	Vns   struct {
-		ID          string
-		Name        string
-		Aliases     []string
-		Description string
-		Searchable  bool
-		Applicable  bool
-		GroupID     string
-		GroupName   string
-		CharCount   int
-		Spoiler     interface{} `json:"spoiler"`
-		Release     struct {
-			ID        string
-			Title     string
-			Alttitle  string
-			Languages []struct {
-				Lang string
-				Lain string
-				Mtl  bool
-				Main bool
-			}
-		} `json:"release,omitempty"`
-		Role interface{} `json:"role"`
-	} `json:"vns"`
-	Image struct {
-		URL       interface{} `json:"url"`
-		ID        interface{} `json:"id"`
-		Violence  interface{} `json:"violence"`
-		Sexual    interface{} `json:"sexual"`
-		Dims      interface{} `json:"dims"`
-		Votecount interface{} `json:"votecount"`
-	} `json:"image"`
-	Weight    interface{} `json:"weight"`
-	Hips      interface{} `json:"hips"`
-	Sex       interface{} `json:"sex"`
-	Bust      interface{} `json:"bust"`
-	BloodType interface{} `json:"blood_type"`
-	ID        interface{} `json:"id"`
-}
-type Release struct {
-	ID     interface{} `json:"id"`
-	Engine interface{} `json:"engine"`
-	Media  struct {
-		Qty    interface{} `json:"qty"`
-		Medium interface{} `json:"medium"`
-	} `json:"media"`
-	Minage    interface{} `json:"minage"`
-	Released  interface{} `json:"released"`
-	Gtin      interface{} `json:"gtin"`
-	Notes     interface{} `json:"notes"`
-	Languages struct {
-		Main  interface{} `json:"main"`
-		Latin interface{} `json:"latin"`
-		Lang  interface{} `json:"lang"`
-		Title interface{} `json:"title"`
-		Mtl   interface{} `json:"mtl"`
-	} `json:"languages"`
-	Extlinks struct {
-		Name  interface{} `json:"name"`
-		Label interface{} `json:"label"`
-		ID    interface{} `json:"id"`
-		URL   interface{} `json:"url"`
-	} `json:"extlinks"`
-	Official  interface{} `json:"official"`
-	Voiced    interface{} `json:"voiced"`
-	Title     interface{} `json:"title"`
-	Alttitle  interface{} `json:"alttitle"`
-	Platforms interface{} `json:"platforms"`
-	Producers struct {
-		Publisher   interface{} `json:"publisher"`
-		Developer   interface{} `json:"developer"`
-		ID          string
-		Name        string
-		Aliases     []string
-		Lang        string
-		Type        string
-		Description string
-	} `json:"producers"`
-	Freeware interface{} `json:"freeware"`
-	HasEro   interface{} `json:"has_ero"`
-	Vns      struct {
-		Aliases interface{} `json:"aliases"`
+	Birthday    [2]int   `json:"birthday,omitempty"`
+	Aliases     []string `json:"aliases"`
+	Original    string   `json:"original,omitempty"`
+	Height      int      `json:"height,omitempty"`
+	Age         int      `json:"age,omitempty"`
+	Description string   `json:"description"`
+	Traits      []struct {
+		Spoiler     Spoiler  `json:"spoiler"`
+		Lie         bool     `json:"lie"`
+		CharCount   int      `json:"char_count"`
+		Aliases     []string `json:"aliases"`
+		Searchable  bool     `json:"searchable"`
+		GroupID     string   `json:"group_id"`
+		Applicable  bool     `json:"applicable"`
+		Description string   `json:"description"`
+		Name        string   `json:"name"`
+		GroupName   string   `json:"group_name"`
+		ID          string   `json:"id"`
+	} `json:"traits,omitempty"`
+	Waist int    `json:"waist,omitempty"`
+	Name  int    `json:"name,omitempty"`
+	Cup   string `json:"cup,omitempty"`
+	Vns   []struct {
+		Spoiler Spoiler
+		Role    string
+
+		Aliases []string `json:"aliases"`
 		Tags    struct {
 			ID          string
 			Name        string
@@ -196,92 +159,211 @@ type Release struct {
 			Searchable  bool
 			Applicable  bool
 			VnCount     int
-			Spoiler     interface{} `json:"spoiler"`
-			Rating      interface{} `json:"rating"`
-			Lie         interface{} `json:"lie"`
+			Spoiler     Spoiler `json:"spoiler"`
+			Rating      int     `json:"rating"`
+			Lie         bool    `json:"lie"`
 		} `json:"tags"`
 		Image struct {
-			Sexual        interface{} `json:"sexual"`
-			Dims          interface{} `json:"dims"`
-			URL           interface{} `json:"url"`
-			ThumbnailDims interface{} `json:"thumbnail_dims"`
-			Thumbnail     interface{} `json:"thumbnail"`
-			ID            interface{} `json:"id"`
-			Violence      interface{} `json:"violence"`
-			Votecount     interface{} `json:"votecount"`
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			ID            string   `json:"id"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
 		} `json:"image"`
-		Rating      interface{} `json:"rating"`
-		Description interface{} `json:"description"`
-		Olang       interface{} `json:"olang"`
-		Devstatus   interface{} `json:"devstatus"`
-		Relations   struct {
-			RelationOfficial interface{} `json:"relation_official"`
-			Relation         interface{} `json:"relation"`
+		Rating      int       `json:"rating,omitempty"`
+		Description string    `json:"description"`
+		Olang       string    `json:"olang"`
+		Devstatus   DevStatus `json:"devstatus"`
+		Relations   []struct {
+			RelationOfficial bool     `json:"relation_official"`
+			Relation         string   `json:"relation"`
+			Aliases          []string `json:"aliases"`
+			Tags             struct {
+				ID          string
+				Name        string
+				Aliases     []string
+				Description string
+				Catagory    string
+				Searchable  bool
+				Applicable  bool
+				VnCount     int
+				Spoiler     Spoiler `json:"spoiler"`
+				Rating      int     `json:"rating"`
+				Lie         bool    `json:"lie"`
+			} `json:"tags"`
+			Image struct {
+				Sexual        Sexual   `json:"sexual"`
+				Dims          [2]int   `json:"dims"`
+				URL           string   `json:"url"`
+				ThumbnailDims []int    `json:"thumbnail_dims"`
+				Thumbnail     string   `json:"thumbnail"`
+				ID            string   `json:"id"`
+				Violence      Violence `json:"violence"`
+				Votecount     int      `json:"votecount"`
+			} `json:"image"`
+			Rating      int       `json:"rating,omitempty"`
+			Description string    `json:"description"`
+			Olang       string    `json:"olang"`
+			Devstatus   DevStatus `json:"devstatus"`
+			Relations   []struct {
+				RelationOfficial bool   `json:"relation_official"`
+				Relation         string `json:"relation"`
+			} `json:"relations"`
+			LengthVotes int      `json:"length_votes"`
+			Platforms   []string `json:"platforms"`
+			Titles      []struct {
+				Title    string `json:"title"`
+				Official bool   `json:"official"`
+				Main     bool   `json:"main"`
+				Lang     string `json:"lang"`
+				Latin    string `json:"latin,omitempty"`
+			} `json:"titles"`
+			Alttitle   string   `json:"alttitle,omitempty"`
+			Title      string   `json:"title"`
+			Languages  []string `json:"languages"`
+			Votecount  int      `json:"votecount"`
+			Developers []struct {
+				Aliases     []string `json:"aliases"`
+				Lang        string   `json:"lang"`
+				Type        string   `json:"type"`
+				Original    string   `json:"original,omitempty"`
+				ID          string   `json:"id"`
+				Description string   `json:"description"`
+				Name        string   `json:"name"`
+			} `json:"developers"`
+			Released      string `json:"released,omitempty"`
+			Length        int    `json:"length,omitempty"`
+			LengthMinutes int    `json:"length_minutes,omitempty"`
+			ID            string `json:"id"`
+			Screenshots   []struct {
+				ID            string
+				Sexual        Sexual   `json:"sexual"`
+				Dims          [2]int   `json:"dims"`
+				URL           string   `json:"url"`
+				ThumbnailDims []int    `json:"thumbnail_dims"`
+				Thumbnail     string   `json:"thumbnail"`
+				Violence      Violence `json:"violence"`
+				Votecount     int      `json:"votecount"`
+				Release       struct {
+					ID     string `json:"id"`
+					Engine string `json:"engine,omitempty"`
+					Media  []struct {
+						Qty    int    `json:"qty"`
+						Medium string `json:"medium"`
+					} `json:"media"`
+					Minage int `json:"minage,omitempty"`
+					// yyyy-mm-dd
+					Released  string `json:"released"`
+					Gtin      string `json:"gtin,omitempty"`
+					Notes     string `json:"notes"`
+					Languages []struct {
+						Main  bool   `json:"main"`
+						Latin string `json:"latin,omitempty"`
+						Lang  string `json:"lang"`
+						Title string `json:"title"`
+						Mtl   bool   `json:"mtl"`
+					} `json:"languages"`
+					Extlinks []struct {
+						Name  string `json:"name"`
+						Label string `json:"label"`
+						ID    string `json:"id"`
+						URL   string `json:"url"`
+					} `json:"extlinks"`
+					Official  bool     `json:"official"`
+					Voiced    int      `json:"voiced"`
+					Title     string   `json:"title"`
+					Alttitle  string   `json:"alttitle,omitempty"`
+					Platforms []string `json:"platforms"`
+					Producers struct {
+						Publisher   bool `json:"publisher"`
+						Developer   bool `json:"developer"`
+						ID          string
+						Name        string
+						Aliases     []string
+						Lang        string
+						Type        string
+						Description string
+					} `json:"producers"`
+					Freeware   bool   `json:"freeware"`
+					HasEro     bool   `json:"has_ero"`
+					Catalog    string `json:"catalog,omitempty"`
+					Resolution string `json:"resolution,omitempty"`
+					Patch      bool   `json:"patch"`
+					Uncensored bool   `json:"uncensored"`
+				}
+			} `json:"screenshots,omitempty"`
 		} `json:"relations"`
-		LengthVotes interface{} `json:"length_votes"`
-		Platforms   interface{} `json:"platforms"`
-		Popularity  interface{} `json:"popularity"`
-		Titles      struct {
-			Title    interface{} `json:"title"`
-			Official interface{} `json:"official"`
-			Main     interface{} `json:"main"`
-			Lang     interface{} `json:"lang"`
-			Latin    interface{} `json:"latin"`
+		LengthVotes int      `json:"length_votes"`
+		Platforms   []string `json:"platforms"`
+		Titles      []struct {
+			Title    string `json:"title"`
+			Official bool   `json:"official"`
+			Main     bool   `json:"main"`
+			Lang     string `json:"lang"`
+			Latin    string `json:"latin,omitempty"`
 		} `json:"titles"`
-		Alttitle   interface{} `json:"alttitle"`
-		Title      interface{} `json:"title"`
-		Languages  interface{} `json:"languages"`
-		Votecount  interface{} `json:"votecount"`
-		Developers struct {
-			Aliases     interface{} `json:"aliases"`
-			Lang        interface{} `json:"lang"`
-			Type        interface{} `json:"type"`
-			Original    interface{} `json:"original"`
-			ID          interface{} `json:"id"`
-			Description interface{} `json:"description"`
-			Name        interface{} `json:"name"`
+		Alttitle   string   `json:"alttitle,omitempty"`
+		Title      string   `json:"title"`
+		Languages  []string `json:"languages"`
+		Votecount  int      `json:"votecount"`
+		Developers []struct {
+			Aliases     []string `json:"aliases"`
+			Lang        string   `json:"lang"`
+			Type        string   `json:"type"`
+			Original    string   `json:"original,omitempty"`
+			ID          string   `json:"id"`
+			Description string   `json:"description"`
+			Name        string   `json:"name"`
 		} `json:"developers"`
-		Released      interface{} `json:"released"`
-		Length        interface{} `json:"length"`
-		LengthMinutes interface{} `json:"length_minutes"`
-		ID            interface{} `json:"id"`
-		Screenshots   struct {
-			Votecount interface{} `json:"votecount"`
-			ID        interface{} `json:"id"`
-			Violence  interface{} `json:"violence"`
-			URL       interface{} `json:"url"`
-			Release   struct {
-				ID     interface{} `json:"id"`
-				Engine interface{} `json:"engine"`
-				Media  struct {
-					Qty    interface{} `json:"qty"`
-					Medium interface{} `json:"medium"`
+		Released      string `json:"released,omitempty"`
+		Length        int    `json:"length,omitempty"`
+		LengthMinutes int    `json:"length_minutes,omitempty"`
+		ID            string `json:"id"`
+		Screenshots   []struct {
+			ID            string
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
+			Release       struct {
+				ID     string `json:"id"`
+				Engine string `json:"engine,omitempty"`
+				Media  []struct {
+					Qty    int    `json:"qty"`
+					Medium string `json:"medium"`
 				} `json:"media"`
-				Minage    interface{} `json:"minage"`
-				Released  interface{} `json:"released"`
-				Gtin      interface{} `json:"gtin"`
-				Notes     interface{} `json:"notes"`
-				Languages struct {
-					Main  interface{} `json:"main"`
-					Latin interface{} `json:"latin"`
-					Lang  interface{} `json:"lang"`
-					Title interface{} `json:"title"`
-					Mtl   interface{} `json:"mtl"`
+				Minage int `json:"minage,omitempty"`
+				// yyyy-mm-dd
+				Released  string `json:"released"`
+				Gtin      string `json:"gtin,omitempty"`
+				Notes     string `json:"notes"`
+				Languages []struct {
+					Main  bool   `json:"main"`
+					Latin string `json:"latin,omitempty"`
+					Lang  string `json:"lang"`
+					Title string `json:"title"`
+					Mtl   bool   `json:"mtl"`
 				} `json:"languages"`
-				Extlinks struct {
-					Name  interface{} `json:"name"`
-					Label interface{} `json:"label"`
-					ID    interface{} `json:"id"`
-					URL   interface{} `json:"url"`
+				Extlinks []struct {
+					Name  string `json:"name"`
+					Label string `json:"label"`
+					ID    string `json:"id"`
+					URL   string `json:"url"`
 				} `json:"extlinks"`
-				Official  interface{} `json:"official"`
-				Voiced    interface{} `json:"voiced"`
-				Title     interface{} `json:"title"`
-				Alttitle  interface{} `json:"alttitle"`
-				Platforms interface{} `json:"platforms"`
+				Official  bool     `json:"official"`
+				Voiced    int      `json:"voiced"`
+				Title     string   `json:"title"`
+				Alttitle  string   `json:"alttitle,omitempty"`
+				Platforms []string `json:"platforms"`
 				Producers struct {
-					Publisher   interface{} `json:"publisher"`
-					Developer   interface{} `json:"developer"`
+					Publisher   bool `json:"publisher"`
+					Developer   bool `json:"developer"`
 					ID          string
 					Name        string
 					Aliases     []string
@@ -289,63 +371,741 @@ type Release struct {
 					Type        string
 					Description string
 				} `json:"producers"`
-				Freeware interface{} `json:"freeware"`
-				HasEro   interface{} `json:"has_ero"`
-				Vns      struct {
-					// this is dumb
-					Rtype interface{} `json:"rtype"`
-				} `json:"vns"`
-				Catalog    interface{} `json:"catalog"`
-				Resolution interface{} `json:"resolution"`
-				Patch      interface{} `json:"patch"`
-				Uncensored interface{} `json:"uncensored"`
-			} `json:"release"`
-			Dims          interface{} `json:"dims"`
-			ThumbnailDims interface{} `json:"thumbnail_dims"`
-			Thumbnail     interface{} `json:"thumbnail"`
-			Sexual        interface{} `json:"sexual"`
-		} `json:"screenshots"`
-		Rtype interface{} `json:"rtype"`
-	} `json:"vns"`
-	Catalog    interface{} `json:"catalog"`
-	Resolution interface{} `json:"resolution"`
-	Patch      interface{} `json:"patch"`
-	Uncensored interface{} `json:"uncensored"`
+				Freeware   bool   `json:"freeware"`
+				HasEro     bool   `json:"has_ero"`
+				Catalog    string `json:"catalog,omitempty"`
+				Resolution string `json:"resolution,omitempty"`
+				Patch      bool   `json:"patch"`
+				Uncensored bool   `json:"uncensored"`
+			}
+		}
+	}
+	Image struct {
+		URL       string   `json:"url"`
+		ID        string   `json:"id"`
+		Violence  Violence `json:"violence"`
+		Sexual    Sexual   `json:"sexual"`
+		Dims      string   `json:"dims"`
+		Votecount int      `json:"votecount"`
+	} `json:"image"`
+	Weight    int       `json:"weight,omitempty"`
+	Hips      int       `json:"hips,omitempty"`
+	Sex       [2]string `json:"sex,omitempty"`
+	Bust      int       `json:"bust,omitempty"`
+	BloodType int       `json:"blood_type,omitempty"`
+	ID        string    `json:"id,omitempty"`
 }
+type Release struct {
+	ID     string `json:"id"`
+	Engine string `json:"engine,omitempty"`
+	Media  []struct {
+		Qty    int    `json:"qty"`
+		Medium string `json:"medium"`
+	} `json:"media"`
+	Minage int `json:"minage,omitempty"`
+	// yyyy-mm-dd
+	Released  string `json:"released"`
+	Gtin      string `json:"gtin,omitempty"`
+	Notes     string `json:"notes"`
+	Languages []struct {
+		Main  bool   `json:"main"`
+		Latin string `json:"latin,omitempty"`
+		Lang  string `json:"lang"`
+		Title string `json:"title"`
+		Mtl   bool   `json:"mtl"`
+	} `json:"languages"`
+	Extlinks []struct {
+		Name  string `json:"name"`
+		Label string `json:"label"`
+		ID    string `json:"id"`
+		URL   string `json:"url"`
+	} `json:"extlinks"`
+	Official  bool     `json:"official"`
+	Voiced    int      `json:"voiced"`
+	Title     string   `json:"title"`
+	Alttitle  string   `json:"alttitle,omitempty"`
+	Platforms []string `json:"platforms"`
+	Producers struct {
+		Publisher   bool `json:"publisher"`
+		Developer   bool `json:"developer"`
+		ID          string
+		Name        string
+		Aliases     []string
+		Lang        string
+		Type        string
+		Description string
+	} `json:"producers"`
+	Freeware bool `json:"freeware"`
+	HasEro   bool `json:"has_ero"`
+	Vns      struct {
+		Aliases []string `json:"aliases"`
+		Tags    struct {
+			ID          string
+			Name        string
+			Aliases     []string
+			Description string
+			Catagory    string
+			Searchable  bool
+			Applicable  bool
+			VnCount     int
+			Spoiler     Spoiler `json:"spoiler"`
+			Rating      int     `json:"rating"`
+			Lie         bool    `json:"lie"`
+		} `json:"tags"`
+		Image struct {
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			ID            string   `json:"id"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
+		} `json:"image"`
+		Rating      int       `json:"rating,omitempty"`
+		Description string    `json:"description"`
+		Olang       string    `json:"olang"`
+		Devstatus   DevStatus `json:"devstatus"`
+		Relations   []struct {
+			RelationOfficial bool   `json:"relation_official"`
+			Relation         string `json:"relation"`
+		} `json:"relations"`
+		LengthVotes int      `json:"length_votes"`
+		Platforms   []string `json:"platforms"`
+		Titles      []struct {
+			Title    string `json:"title"`
+			Official bool   `json:"official"`
+			Main     bool   `json:"main"`
+			Lang     string `json:"lang"`
+			Latin    string `json:"latin,omitempty"`
+		} `json:"titles"`
+		Alttitle   string   `json:"alttitle,omitempty"`
+		Title      string   `json:"title"`
+		Languages  []string `json:"languages"`
+		Votecount  int      `json:"votecount"`
+		Developers []struct {
+			Aliases     []string `json:"aliases"`
+			Lang        string   `json:"lang"`
+			Type        string   `json:"type"`
+			Original    string   `json:"original,omitempty"`
+			ID          string   `json:"id"`
+			Description string   `json:"description"`
+			Name        string   `json:"name"`
+		} `json:"developers"`
+		Released      string `json:"released,omitempty"`
+		Length        int    `json:"length,omitempty"`
+		LengthMinutes int    `json:"length_minutes,omitempty"`
+		ID            string `json:"id"`
+		Screenshots   []struct {
+			ID            string
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
+			Release       struct {
+				ID     string `json:"id"`
+				Engine string `json:"engine,omitempty"`
+				Media  []struct {
+					Qty    int    `json:"qty"`
+					Medium string `json:"medium"`
+				} `json:"media"`
+				Minage int `json:"minage,omitempty"`
+				// yyyy-mm-dd
+				Released  string `json:"released"`
+				Gtin      string `json:"gtin,omitempty"`
+				Notes     string `json:"notes"`
+				Languages []struct {
+					Main  bool   `json:"main"`
+					Latin string `json:"latin,omitempty"`
+					Lang  string `json:"lang"`
+					Title string `json:"title"`
+					Mtl   bool   `json:"mtl"`
+				} `json:"languages"`
+				Extlinks []struct {
+					Name  string `json:"name"`
+					Label string `json:"label"`
+					ID    string `json:"id"`
+					URL   string `json:"url"`
+				} `json:"extlinks"`
+				Official  bool     `json:"official"`
+				Voiced    int      `json:"voiced"`
+				Title     string   `json:"title"`
+				Alttitle  string   `json:"alttitle,omitempty"`
+				Platforms []string `json:"platforms"`
+				Producers struct {
+					Publisher   bool `json:"publisher"`
+					Developer   bool `json:"developer"`
+					ID          string
+					Name        string
+					Aliases     []string
+					Lang        string
+					Type        string
+					Description string
+				} `json:"producers"`
+				Freeware   bool   `json:"freeware"`
+				HasEro     bool   `json:"has_ero"`
+				Catalog    string `json:"catalog,omitempty"`
+				Resolution string `json:"resolution,omitempty"`
+				Patch      bool   `json:"patch"`
+				Uncensored bool   `json:"uncensored"`
+			}
+		}
+	} `json:"vns"`
+	Catalog    string `json:"catalog,omitempty"`
+	Resolution string `json:"resolution,omitempty"`
+	Patch      bool   `json:"patch"`
+	Uncensored bool   `json:"uncensored"`
+}
+
+// POST /ulist.
 type Ulist struct {
 	Releases struct {
 		ListStatus interface{} `json:"list_status"`
-		Inherit    string      `json:"_inherit"`
+		ID         string      `json:"id"`
+		Engine     string      `json:"engine,omitempty"`
+		Media      []struct {
+			Qty    int    `json:"qty"`
+			Medium string `json:"medium"`
+		} `json:"media"`
+		Minage int `json:"minage,omitempty"`
+		// yyyy-mm-dd
+		Released  string `json:"released"`
+		Gtin      string `json:"gtin,omitempty"`
+		Notes     string `json:"notes"`
+		Languages []struct {
+			Main  bool   `json:"main"`
+			Latin string `json:"latin,omitempty"`
+			Lang  string `json:"lang"`
+			Title string `json:"title"`
+			Mtl   bool   `json:"mtl"`
+		} `json:"languages"`
+		Extlinks []struct {
+			Name  string `json:"name"`
+			Label string `json:"label"`
+			ID    string `json:"id"`
+			URL   string `json:"url"`
+		} `json:"extlinks"`
+		Official  bool     `json:"official"`
+		Voiced    int      `json:"voiced"`
+		Title     string   `json:"title"`
+		Alttitle  string   `json:"alttitle,omitempty"`
+		Platforms []string `json:"platforms"`
+		Producers struct {
+			Publisher   bool `json:"publisher"`
+			Developer   bool `json:"developer"`
+			ID          string
+			Name        string
+			Aliases     []string
+			Lang        string
+			Type        string
+			Description string
+		} `json:"producers"`
+		Freeware bool `json:"freeware"`
+		HasEro   bool `json:"has_ero"`
+		Vns      struct {
+			Aliases []string `json:"aliases"`
+			Tags    struct {
+				ID          string
+				Name        string
+				Aliases     []string
+				Description string
+				Catagory    string
+				Searchable  bool
+				Applicable  bool
+				VnCount     int
+				Spoiler     Spoiler `json:"spoiler"`
+				Rating      int     `json:"rating"`
+				Lie         bool    `json:"lie"`
+			} `json:"tags"`
+			Image struct {
+				Sexual        Sexual   `json:"sexual"`
+				Dims          [2]int   `json:"dims"`
+				URL           string   `json:"url"`
+				ThumbnailDims []int    `json:"thumbnail_dims"`
+				Thumbnail     string   `json:"thumbnail"`
+				ID            string   `json:"id"`
+				Violence      Violence `json:"violence"`
+				Votecount     int      `json:"votecount"`
+			} `json:"image"`
+			Rating      int       `json:"rating,omitempty"`
+			Description string    `json:"description"`
+			Olang       string    `json:"olang"`
+			Devstatus   DevStatus `json:"devstatus"`
+			Relations   []struct {
+				RelationOfficial bool   `json:"relation_official"`
+				Relation         string `json:"relation"`
+				// vn
+			} `json:"relations"`
+			LengthVotes int      `json:"length_votes"`
+			Platforms   []string `json:"platforms"`
+			Titles      []struct {
+				Title    string `json:"title"`
+				Official bool   `json:"official"`
+				Main     bool   `json:"main"`
+				Lang     string `json:"lang"`
+				Latin    string `json:"latin,omitempty"`
+			} `json:"titles"`
+			Alttitle   string   `json:"alttitle,omitempty"`
+			Title      string   `json:"title"`
+			Languages  []string `json:"languages"`
+			Votecount  int      `json:"votecount"`
+			Developers []struct {
+				Aliases     []string `json:"aliases"`
+				Lang        string   `json:"lang"`
+				Type        string   `json:"type"`
+				Original    string   `json:"original,omitempty"`
+				ID          string   `json:"id"`
+				Description string   `json:"description"`
+				Name        string   `json:"name"`
+			} `json:"developers"`
+			Released      string `json:"released,omitempty"`
+			Length        int    `json:"length,omitempty"`
+			LengthMinutes int    `json:"length_minutes,omitempty"`
+			ID            string `json:"id"`
+			Screenshots   []struct {
+				Sexual        Sexual   `json:"sexual"`
+				Dims          [2]int   `json:"dims"`
+				URL           string   `json:"url"`
+				ThumbnailDims []int    `json:"thumbnail_dims"`
+				Thumbnail     string   `json:"thumbnail"`
+				ID            string   `json:"id"`
+				Violence      Violence `json:"violence"`
+				Votecount     int      `json:"votecount"`
+				Release       struct {
+					ID     string `json:"id"`
+					Engine string `json:"engine,omitempty"`
+					Media  []struct {
+						Qty    int    `json:"qty"`
+						Medium string `json:"medium"`
+					} `json:"media"`
+					Minage int `json:"minage,omitempty"`
+					// yyyy-mm-dd
+					Released  string `json:"released"`
+					Gtin      string `json:"gtin,omitempty"`
+					Notes     string `json:"notes"`
+					Languages []struct {
+						Main  bool   `json:"main"`
+						Latin string `json:"latin,omitempty"`
+						Lang  string `json:"lang"`
+						Title string `json:"title"`
+						Mtl   bool   `json:"mtl"`
+					} `json:"languages"`
+					Extlinks []struct {
+						Name  string `json:"name"`
+						Label string `json:"label"`
+						ID    string `json:"id"`
+						URL   string `json:"url"`
+					} `json:"extlinks"`
+					Official  bool     `json:"official"`
+					Voiced    int      `json:"voiced"`
+					Title     string   `json:"title"`
+					Alttitle  string   `json:"alttitle,omitempty"`
+					Platforms []string `json:"platforms"`
+					Producers struct {
+						Publisher   bool `json:"publisher"`
+						Developer   bool `json:"developer"`
+						ID          string
+						Name        string
+						Aliases     []string
+						Lang        string
+						Type        string
+						Description string
+					} `json:"producers"`
+					Freeware   bool   `json:"freeware"`
+					HasEro     bool   `json:"has_ero"`
+					Catalog    string `json:"catalog,omitempty"`
+					Resolution string `json:"resolution,omitempty"`
+					Patch      bool   `json:"patch"`
+					Uncensored bool   `json:"uncensored"`
+				}
+			} `json:"screenshots,omitempty"`
+		} `json:"vns"`
+		Catalog    string `json:"catalog,omitempty"`
+		Resolution string `json:"resolution,omitempty"`
+		Patch      bool   `json:"patch"`
+		Uncensored bool   `json:"uncensored"`
 	} `json:"releases"`
-	Vote     interface{} `json:"vote"`
-	Added    interface{} `json:"added"`
-	Finished interface{} `json:"finished"`
+	Vote int `json:"vote,omitempty"`
+	// unix timpstamp.
+	Added int `json:"added"`
+	// yyyy-mm-dd
+	Finished string `json:"finished,omitempty"`
 	Vn       struct {
-		Inherit string `json:"_inherit"`
+		Aliases []string `json:"aliases"`
+		Tags    struct {
+			ID          string
+			Name        string
+			Aliases     []string
+			Description string
+			Catagory    string
+			Searchable  bool
+			Applicable  bool
+			VnCount     int
+			Spoiler     Spoiler `json:"spoiler"`
+			Rating      int     `json:"rating"`
+			Lie         bool    `json:"lie"`
+		} `json:"tags"`
+		Image struct {
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			ID            string   `json:"id"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
+		} `json:"image"`
+		Rating      int       `json:"rating,omitempty"`
+		Description string    `json:"description"`
+		Olang       string    `json:"olang"`
+		Devstatus   DevStatus `json:"devstatus"`
+		Relations   []struct {
+			RelationOfficial bool     `json:"relation_official"`
+			Relation         string   `json:"relation"`
+			Aliases          []string `json:"aliases"`
+			Tags             struct {
+				ID          string
+				Name        string
+				Aliases     []string
+				Description string
+				Catagory    string
+				Searchable  bool
+				Applicable  bool
+				VnCount     int
+				Spoiler     Spoiler `json:"spoiler"`
+				Rating      int     `json:"rating"`
+				Lie         bool    `json:"lie"`
+			} `json:"tags"`
+			Image struct {
+				Sexual        Sexual   `json:"sexual"`
+				Dims          [2]int   `json:"dims"`
+				URL           string   `json:"url"`
+				ThumbnailDims []int    `json:"thumbnail_dims"`
+				Thumbnail     string   `json:"thumbnail"`
+				ID            string   `json:"id"`
+				Violence      Violence `json:"violence"`
+				Votecount     int      `json:"votecount"`
+			} `json:"image"`
+			Rating      int       `json:"rating,omitempty"`
+			Description string    `json:"description"`
+			Olang       string    `json:"olang"`
+			Devstatus   DevStatus `json:"devstatus"`
+			Relations   []struct {
+				RelationOfficial bool   `json:"relation_official"`
+				Relation         string `json:"relation"`
+			} `json:"relations"`
+			LengthVotes int      `json:"length_votes"`
+			Platforms   []string `json:"platforms"`
+			Titles      []struct {
+				Title    string `json:"title"`
+				Official bool   `json:"official"`
+				Main     bool   `json:"main"`
+				Lang     string `json:"lang"`
+				Latin    string `json:"latin,omitempty"`
+			} `json:"titles"`
+			Alttitle   string   `json:"alttitle,omitempty"`
+			Title      string   `json:"title"`
+			Languages  []string `json:"languages"`
+			Votecount  int      `json:"votecount"`
+			Developers []struct {
+				Aliases     []string `json:"aliases"`
+				Lang        string   `json:"lang"`
+				Type        string   `json:"type"`
+				Original    string   `json:"original,omitempty"`
+				ID          string   `json:"id"`
+				Description string   `json:"description"`
+				Name        string   `json:"name"`
+			} `json:"developers"`
+			Released      string `json:"released,omitempty"`
+			Length        int    `json:"length,omitempty"`
+			LengthMinutes int    `json:"length_minutes,omitempty"`
+			ID            string `json:"id"`
+			Screenshots   []struct {
+				ID            string
+				Sexual        Sexual   `json:"sexual"`
+				Dims          [2]int   `json:"dims"`
+				URL           string   `json:"url"`
+				ThumbnailDims []int    `json:"thumbnail_dims"`
+				Thumbnail     string   `json:"thumbnail"`
+				Violence      Violence `json:"violence"`
+				Votecount     int      `json:"votecount"`
+				Release       struct {
+					ID     string `json:"id"`
+					Engine string `json:"engine,omitempty"`
+					Media  []struct {
+						Qty    int    `json:"qty"`
+						Medium string `json:"medium"`
+					} `json:"media"`
+					Minage int `json:"minage,omitempty"`
+					// yyyy-mm-dd
+					Released  string `json:"released"`
+					Gtin      string `json:"gtin,omitempty"`
+					Notes     string `json:"notes"`
+					Languages []struct {
+						Main  bool   `json:"main"`
+						Latin string `json:"latin,omitempty"`
+						Lang  string `json:"lang"`
+						Title string `json:"title"`
+						Mtl   bool   `json:"mtl"`
+					} `json:"languages"`
+					Extlinks []struct {
+						Name  string `json:"name"`
+						Label string `json:"label"`
+						ID    string `json:"id"`
+						URL   string `json:"url"`
+					} `json:"extlinks"`
+					Official  bool     `json:"official"`
+					Voiced    int      `json:"voiced"`
+					Title     string   `json:"title"`
+					Alttitle  string   `json:"alttitle,omitempty"`
+					Platforms []string `json:"platforms"`
+					Producers struct {
+						Publisher   bool `json:"publisher"`
+						Developer   bool `json:"developer"`
+						ID          string
+						Name        string
+						Aliases     []string
+						Lang        string
+						Type        string
+						Description string
+					} `json:"producers"`
+					Freeware bool `json:"freeware"`
+					HasEro   bool `json:"has_ero"`
+					Vns      struct {
+						Aliases []string `json:"aliases"`
+						Tags    struct {
+							ID          string
+							Name        string
+							Aliases     []string
+							Description string
+							Catagory    string
+							Searchable  bool
+							Applicable  bool
+							VnCount     int
+							Spoiler     Spoiler `json:"spoiler"`
+							Rating      int     `json:"rating"`
+							Lie         bool    `json:"lie"`
+						} `json:"tags"`
+						Image struct {
+							Sexual        Sexual   `json:"sexual"`
+							Dims          [2]int   `json:"dims"`
+							URL           string   `json:"url"`
+							ThumbnailDims []int    `json:"thumbnail_dims"`
+							Thumbnail     string   `json:"thumbnail"`
+							ID            string   `json:"id"`
+							Violence      Violence `json:"violence"`
+							Votecount     int      `json:"votecount"`
+						} `json:"image"`
+						Rating      int       `json:"rating,omitempty"`
+						Description string    `json:"description"`
+						Olang       string    `json:"olang"`
+						Devstatus   DevStatus `json:"devstatus"`
+						Relations   []struct {
+							RelationOfficial bool   `json:"relation_official"`
+							Relation         string `json:"relation"`
+						} `json:"relations"`
+						LengthVotes int      `json:"length_votes"`
+						Platforms   []string `json:"platforms"`
+						Titles      []struct {
+							Title    string `json:"title"`
+							Official bool   `json:"official"`
+							Main     bool   `json:"main"`
+							Lang     string `json:"lang"`
+							Latin    string `json:"latin,omitempty"`
+						} `json:"titles"`
+						Alttitle   string   `json:"alttitle,omitempty"`
+						Title      string   `json:"title"`
+						Languages  []string `json:"languages"`
+						Votecount  int      `json:"votecount"`
+						Developers []struct {
+							Aliases     []string `json:"aliases"`
+							Lang        string   `json:"lang"`
+							Type        string   `json:"type"`
+							Original    string   `json:"original,omitempty"`
+							ID          string   `json:"id"`
+							Description string   `json:"description"`
+							Name        string   `json:"name"`
+						} `json:"developers"`
+						Released      string `json:"released,omitempty"`
+						Length        int    `json:"length,omitempty"`
+						LengthMinutes int    `json:"length_minutes,omitempty"`
+						ID            string `json:"id"`
+					} `json:"vns"`
+					Catalog    string `json:"catalog,omitempty"`
+					Resolution string `json:"resolution,omitempty"`
+					Patch      bool   `json:"patch"`
+					Uncensored bool   `json:"uncensored"`
+				}
+			} `json:"screenshots,omitempty"`
+		} `json:"relations"`
+		LengthVotes int      `json:"length_votes"`
+		Platforms   []string `json:"platforms"`
+		Titles      []struct {
+			Title    string `json:"title"`
+			Official bool   `json:"official"`
+			Main     bool   `json:"main"`
+			Lang     string `json:"lang"`
+			Latin    string `json:"latin,omitempty"`
+		} `json:"titles"`
+		Alttitle   string   `json:"alttitle,omitempty"`
+		Title      string   `json:"title"`
+		Languages  []string `json:"languages"`
+		Votecount  int      `json:"votecount"`
+		Developers []struct {
+			Aliases     []string `json:"aliases"`
+			Lang        string   `json:"lang"`
+			Type        string   `json:"type"`
+			Original    string   `json:"original,omitempty"`
+			ID          string   `json:"id"`
+			Description string   `json:"description"`
+			Name        string   `json:"name"`
+		} `json:"developers"`
+		Released      string `json:"released,omitempty"`
+		Length        int    `json:"length,omitempty"`
+		LengthMinutes int    `json:"length_minutes,omitempty"`
+		ID            string `json:"id"`
+		Screenshots   []struct {
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
+			ID            string   `json:"id"`
+			Engine        string   `json:"engine,omitempty"`
+			Media         []struct {
+				Qty    int    `json:"qty"`
+				Medium string `json:"medium"`
+			} `json:"media"`
+			Minage int `json:"minage,omitempty"`
+			// yyyy-mm-dd
+			Released  string `json:"released"`
+			Gtin      string `json:"gtin,omitempty"`
+			Notes     string `json:"notes"`
+			Languages []struct {
+				Main  bool   `json:"main"`
+				Latin string `json:"latin,omitempty"`
+				Lang  string `json:"lang"`
+				Title string `json:"title"`
+				Mtl   bool   `json:"mtl"`
+			} `json:"languages"`
+			Extlinks []struct {
+				Name  string `json:"name"`
+				Label string `json:"label"`
+				ID    string `json:"id"`
+				URL   string `json:"url"`
+			} `json:"extlinks"`
+			Official  bool     `json:"official"`
+			Voiced    int      `json:"voiced"`
+			Title     string   `json:"title"`
+			Alttitle  string   `json:"alttitle,omitempty"`
+			Platforms []string `json:"platforms"`
+			Producers struct {
+				Publisher   bool `json:"publisher"`
+				Developer   bool `json:"developer"`
+				ID          string
+				Name        string
+				Aliases     []string
+				Lang        string
+				Type        string
+				Description string
+			} `json:"producers"`
+			Freeware bool `json:"freeware"`
+			HasEro   bool `json:"has_ero"`
+			Vns      struct {
+				Aliases []string `json:"aliases"`
+				Tags    struct {
+					ID          string
+					Name        string
+					Aliases     []string
+					Description string
+					Catagory    string
+					Searchable  bool
+					Applicable  bool
+					VnCount     int
+					Spoiler     Spoiler `json:"spoiler"`
+					Rating      int     `json:"rating"`
+					Lie         bool    `json:"lie"`
+				} `json:"tags"`
+				Image struct {
+					Sexual        Sexual   `json:"sexual"`
+					Dims          [2]int   `json:"dims"`
+					URL           string   `json:"url"`
+					ThumbnailDims []int    `json:"thumbnail_dims"`
+					Thumbnail     string   `json:"thumbnail"`
+					ID            string   `json:"id"`
+					Violence      Violence `json:"violence"`
+					Votecount     int      `json:"votecount"`
+				} `json:"image"`
+				Rating      int       `json:"rating,omitempty"`
+				Description string    `json:"description"`
+				Olang       string    `json:"olang"`
+				Devstatus   DevStatus `json:"devstatus"`
+				Relations   []struct {
+					RelationOfficial bool   `json:"relation_official"`
+					Relation         string `json:"relation"`
+				} `json:"relations"`
+				LengthVotes int      `json:"length_votes"`
+				Platforms   []string `json:"platforms"`
+				Titles      []struct {
+					Title    string `json:"title"`
+					Official bool   `json:"official"`
+					Main     bool   `json:"main"`
+					Lang     string `json:"lang"`
+					Latin    string `json:"latin,omitempty"`
+				} `json:"titles"`
+				Alttitle   string   `json:"alttitle,omitempty"`
+				Title      string   `json:"title"`
+				Languages  []string `json:"languages"`
+				Votecount  int      `json:"votecount"`
+				Developers []struct {
+					Aliases     []string `json:"aliases"`
+					Lang        string   `json:"lang"`
+					Type        string   `json:"type"`
+					Original    string   `json:"original,omitempty"`
+					ID          string   `json:"id"`
+					Description string   `json:"description"`
+					Name        string   `json:"name"`
+				} `json:"developers"`
+				Released      string `json:"released,omitempty"`
+				Length        int    `json:"length,omitempty"`
+				LengthMinutes int    `json:"length_minutes,omitempty"`
+				ID            string `json:"id"`
+			} `json:"vns"`
+			Catalog    string `json:"catalog,omitempty"`
+			Resolution string `json:"resolution,omitempty"`
+			Patch      bool   `json:"patch"`
+			Uncensored bool   `json:"uncensored"`
+		} `json:"screenshots,omitempty"`
 	} `json:"vn"`
-	Lastmod interface{} `json:"lastmod"`
-	Labels  struct {
-		Label interface{} `json:"label"`
-		ID    interface{} `json:"id"`
+	// unix timestamp
+	Lastmod int `json:"lastmod"`
+	Labels  []struct {
+		Label string `json:"label"`
+		ID    int    `json:"id"`
 	} `json:"labels"`
-	Started interface{} `json:"started"`
-	Notes   interface{} `json:"notes"`
-	Voted   interface{} `json:"voted"`
-	ID      interface{} `json:"id"`
+	Started string `json:"started"`
+	Notes   string `json:"notes"`
+	Voted   int    `json:"voted,omitempty"`
+	ID      string `json:"id"`
 }
 type Trait struct {
-	CharCount   interface{} `json:"char_count"`
-	Aliases     interface{} `json:"aliases"`
-	Searchable  interface{} `json:"searchable"`
-	GroupID     interface{} `json:"group_id"`
-	Applicable  interface{} `json:"applicable"`
-	Description interface{} `json:"description"`
-	Name        interface{} `json:"name"`
-	GroupName   interface{} `json:"group_name"`
-	ID          interface{} `json:"id"`
+	CharCount   int      `json:"char_count"`
+	Aliases     []string `json:"aliases"`
+	Searchable  bool     `json:"searchable"`
+	GroupID     string   `json:"group_id"`
+	Applicable  bool     `json:"applicable"`
+	Description string   `json:"description"`
+	Name        string   `json:"name"`
+	GroupName   string   `json:"group_name"`
+	ID          string   `json:"id"`
 }
 type Vn struct {
-	Aliases interface{} `json:"aliases"`
+	Aliases []string `json:"aliases"`
 	Tags    struct {
 		ID          string
 		Name        string
@@ -355,92 +1115,125 @@ type Vn struct {
 		Searchable  bool
 		Applicable  bool
 		VnCount     int
-		Spoiler     interface{} `json:"spoiler"`
-		Rating      interface{} `json:"rating"`
-		Lie         interface{} `json:"lie"`
+		Spoiler     Spoiler `json:"spoiler"`
+		Rating      int     `json:"rating"`
+		Lie         bool    `json:"lie"`
 	} `json:"tags"`
 	Image struct {
-		Sexual        interface{} `json:"sexual"`
-		Dims          interface{} `json:"dims"`
-		URL           interface{} `json:"url"`
-		ThumbnailDims interface{} `json:"thumbnail_dims"`
-		Thumbnail     interface{} `json:"thumbnail"`
-		ID            interface{} `json:"id"`
-		Violence      interface{} `json:"violence"`
-		Votecount     interface{} `json:"votecount"`
+		Sexual        Sexual   `json:"sexual"`
+		Dims          [2]int   `json:"dims"`
+		URL           string   `json:"url"`
+		ThumbnailDims []int    `json:"thumbnail_dims"`
+		Thumbnail     string   `json:"thumbnail"`
+		ID            string   `json:"id"`
+		Violence      Violence `json:"violence"`
+		Votecount     int      `json:"votecount"`
 	} `json:"image"`
-	Rating      interface{} `json:"rating"`
-	Description interface{} `json:"description"`
-	Olang       interface{} `json:"olang"`
-	Devstatus   interface{} `json:"devstatus"`
-	Relations   struct {
-		RelationOfficial interface{} `json:"relation_official"`
-		Relation         interface{} `json:"relation"`
-	} `json:"relations"`
-	LengthVotes interface{} `json:"length_votes"`
-	Platforms   interface{} `json:"platforms"`
-	Popularity  interface{} `json:"popularity"`
-	Titles      struct {
-		Title    interface{} `json:"title"`
-		Official interface{} `json:"official"`
-		Main     interface{} `json:"main"`
-		Lang     interface{} `json:"lang"`
-		Latin    interface{} `json:"latin"`
-	} `json:"titles"`
-	Alttitle   interface{} `json:"alttitle"`
-	Title      interface{} `json:"title"`
-	Languages  interface{} `json:"languages"`
-	Votecount  interface{} `json:"votecount"`
-	Developers []struct {
-		Aliases     interface{} `json:"aliases"`
-		Lang        interface{} `json:"lang"`
-		Type        interface{} `json:"type"`
-		Original    interface{} `json:"original"`
-		ID          interface{} `json:"id"`
-		Description interface{} `json:"description"`
-		Name        interface{} `json:"name"`
-	} `json:"developers"`
-	Released      interface{} `json:"released"`
-	Length        interface{} `json:"length"`
-	LengthMinutes interface{} `json:"length_minutes"`
-	ID            interface{} `json:"id"`
-	Screenshots   struct {
-		Votecount interface{} `json:"votecount"`
-		ID        interface{} `json:"id"`
-		Violence  interface{} `json:"violence"`
-		URL       interface{} `json:"url"`
-		Release   struct {
-			ID     interface{} `json:"id"`
-			Engine interface{} `json:"engine"`
-			Media  struct {
-				Qty    interface{} `json:"qty"`
-				Medium interface{} `json:"medium"`
+	Rating      int       `json:"rating,omitempty"`
+	Description string    `json:"description"`
+	Olang       string    `json:"olang"`
+	Devstatus   DevStatus `json:"devstatus"`
+	Relations   []struct {
+		RelationOfficial bool     `json:"relation_official"`
+		Relation         string   `json:"relation"`
+		Aliases          []string `json:"aliases"`
+		Tags             struct {
+			ID          string
+			Name        string
+			Aliases     []string
+			Description string
+			Catagory    string
+			Searchable  bool
+			Applicable  bool
+			VnCount     int
+			Spoiler     Spoiler `json:"spoiler"`
+			Rating      int     `json:"rating"`
+			Lie         bool    `json:"lie"`
+		} `json:"tags"`
+		Image struct {
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			ID            string   `json:"id"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
+		} `json:"image"`
+		Rating      int       `json:"rating,omitempty"`
+		Description string    `json:"description"`
+		Olang       string    `json:"olang"`
+		Devstatus   DevStatus `json:"devstatus"`
+		Relations   []struct {
+			RelationOfficial bool   `json:"relation_official"`
+			Relation         string `json:"relation"`
+		} `json:"relations"`
+		LengthVotes int      `json:"length_votes"`
+		Platforms   []string `json:"platforms"`
+		Titles      []struct {
+			Title    string `json:"title"`
+			Official bool   `json:"official"`
+			Main     bool   `json:"main"`
+			Lang     string `json:"lang"`
+			Latin    string `json:"latin,omitempty"`
+		} `json:"titles"`
+		Alttitle   string   `json:"alttitle,omitempty"`
+		Title      string   `json:"title"`
+		Languages  []string `json:"languages"`
+		Votecount  int      `json:"votecount"`
+		Developers []struct {
+			Aliases     []string `json:"aliases"`
+			Lang        string   `json:"lang"`
+			Type        string   `json:"type"`
+			Original    string   `json:"original,omitempty"`
+			ID          string   `json:"id"`
+			Description string   `json:"description"`
+			Name        string   `json:"name"`
+		} `json:"developers"`
+		Released      string `json:"released,omitempty"`
+		Length        int    `json:"length,omitempty"`
+		LengthMinutes int    `json:"length_minutes,omitempty"`
+		ID            string `json:"id"`
+		Screenshots   []struct {
+			Sexual        Sexual   `json:"sexual"`
+			Dims          [2]int   `json:"dims"`
+			URL           string   `json:"url"`
+			ThumbnailDims []int    `json:"thumbnail_dims"`
+			Thumbnail     string   `json:"thumbnail"`
+			Violence      Violence `json:"violence"`
+			Votecount     int      `json:"votecount"`
+			ID            string   `json:"id"`
+			Engine        string   `json:"engine,omitempty"`
+			Media         []struct {
+				Qty    int    `json:"qty"`
+				Medium string `json:"medium"`
 			} `json:"media"`
-			Minage    interface{} `json:"minage"`
-			Released  interface{} `json:"released"`
-			Gtin      interface{} `json:"gtin"`
-			Notes     interface{} `json:"notes"`
-			Languages struct {
-				Main  interface{} `json:"main"`
-				Latin interface{} `json:"latin"`
-				Lang  interface{} `json:"lang"`
-				Title interface{} `json:"title"`
-				Mtl   interface{} `json:"mtl"`
+			Minage int `json:"minage,omitempty"`
+			// yyyy-mm-dd
+			Released  string `json:"released"`
+			Gtin      string `json:"gtin,omitempty"`
+			Notes     string `json:"notes"`
+			Languages []struct {
+				Main  bool   `json:"main"`
+				Latin string `json:"latin,omitempty"`
+				Lang  string `json:"lang"`
+				Title string `json:"title"`
+				Mtl   bool   `json:"mtl"`
 			} `json:"languages"`
-			Extlinks struct {
-				Name  interface{} `json:"name"`
-				Label interface{} `json:"label"`
-				ID    interface{} `json:"id"`
-				URL   interface{} `json:"url"`
+			Extlinks []struct {
+				Name  string `json:"name"`
+				Label string `json:"label"`
+				ID    string `json:"id"`
+				URL   string `json:"url"`
 			} `json:"extlinks"`
-			Official  interface{} `json:"official"`
-			Voiced    interface{} `json:"voiced"`
-			Title     interface{} `json:"title"`
-			Alttitle  interface{} `json:"alttitle"`
-			Platforms interface{} `json:"platforms"`
+			Official  bool     `json:"official"`
+			Voiced    int      `json:"voiced"`
+			Title     string   `json:"title"`
+			Alttitle  string   `json:"alttitle,omitempty"`
+			Platforms []string `json:"platforms"`
 			Producers struct {
-				Publisher   interface{} `json:"publisher"`
-				Developer   interface{} `json:"developer"`
+				Publisher   bool `json:"publisher"`
+				Developer   bool `json:"developer"`
 				ID          string
 				Name        string
 				Aliases     []string
@@ -448,22 +1241,217 @@ type Vn struct {
 				Type        string
 				Description string
 			} `json:"producers"`
-			Freeware interface{} `json:"freeware"`
-			HasEro   interface{} `json:"has_ero"`
+			Freeware bool `json:"freeware"`
+			HasEro   bool `json:"has_ero"`
 			Vns      struct {
-				// get the data from the vn u fetched idiot
-				Rtype interface{} `json:"rtype"`
+				Aliases []string `json:"aliases"`
+				Tags    struct {
+					ID          string
+					Name        string
+					Aliases     []string
+					Description string
+					Catagory    string
+					Searchable  bool
+					Applicable  bool
+					VnCount     int
+					Spoiler     Spoiler `json:"spoiler"`
+					Rating      int     `json:"rating"`
+					Lie         bool    `json:"lie"`
+				} `json:"tags"`
+				Image struct {
+					Sexual        Sexual   `json:"sexual"`
+					Dims          [2]int   `json:"dims"`
+					URL           string   `json:"url"`
+					ThumbnailDims []int    `json:"thumbnail_dims"`
+					Thumbnail     string   `json:"thumbnail"`
+					ID            string   `json:"id"`
+					Violence      Violence `json:"violence"`
+					Votecount     int      `json:"votecount"`
+				} `json:"image"`
+				Rating      int       `json:"rating,omitempty"`
+				Description string    `json:"description"`
+				Olang       string    `json:"olang"`
+				Devstatus   DevStatus `json:"devstatus"`
+				Relations   []struct {
+					RelationOfficial bool   `json:"relation_official"`
+					Relation         string `json:"relation"`
+				} `json:"relations"`
+				LengthVotes int      `json:"length_votes"`
+				Platforms   []string `json:"platforms"`
+				Titles      []struct {
+					Title    string `json:"title"`
+					Official bool   `json:"official"`
+					Main     bool   `json:"main"`
+					Lang     string `json:"lang"`
+					Latin    string `json:"latin,omitempty"`
+				} `json:"titles"`
+				Alttitle   string   `json:"alttitle,omitempty"`
+				Title      string   `json:"title"`
+				Languages  []string `json:"languages"`
+				Votecount  int      `json:"votecount"`
+				Developers []struct {
+					Aliases     []string `json:"aliases"`
+					Lang        string   `json:"lang"`
+					Type        string   `json:"type"`
+					Original    string   `json:"original,omitempty"`
+					ID          string   `json:"id"`
+					Description string   `json:"description"`
+					Name        string   `json:"name"`
+				} `json:"developers"`
+				Released      string `json:"released,omitempty"`
+				Length        int    `json:"length,omitempty"`
+				LengthMinutes int    `json:"length_minutes,omitempty"`
+				ID            string `json:"id"`
 			} `json:"vns"`
-			Catalog    interface{} `json:"catalog"`
-			Resolution interface{} `json:"resolution"`
-			Patch      interface{} `json:"patch"`
-			Uncensored interface{} `json:"uncensored"`
-		} `json:"release"`
-		Dims          interface{} `json:"dims"`
-		ThumbnailDims interface{} `json:"thumbnail_dims"`
-		Thumbnail     interface{} `json:"thumbnail"`
-		Sexual        interface{} `json:"sexual"`
-	} `json:"screenshots"`
+			Catalog    string `json:"catalog,omitempty"`
+			Resolution string `json:"resolution,omitempty"`
+			Patch      bool   `json:"patch"`
+			Uncensored bool   `json:"uncensored"`
+		} `json:"screenshots,omitempty"`
+	} `json:"relations"`
+	LengthVotes int      `json:"length_votes"`
+	Platforms   []string `json:"platforms"`
+	Titles      []struct {
+		Title    string `json:"title"`
+		Official bool   `json:"official"`
+		Main     bool   `json:"main"`
+		Lang     string `json:"lang"`
+		Latin    string `json:"latin,omitempty"`
+	} `json:"titles"`
+	Alttitle   string   `json:"alttitle,omitempty"`
+	Title      string   `json:"title"`
+	Languages  []string `json:"languages"`
+	Votecount  int      `json:"votecount"`
+	Developers []struct {
+		Aliases     []string `json:"aliases"`
+		Lang        string   `json:"lang"`
+		Type        string   `json:"type"`
+		Original    string   `json:"original,omitempty"`
+		ID          string   `json:"id"`
+		Description string   `json:"description"`
+		Name        string   `json:"name"`
+	} `json:"developers"`
+	Released      string `json:"released,omitempty"`
+	Length        int    `json:"length,omitempty"`
+	LengthMinutes int    `json:"length_minutes,omitempty"`
+	ID            string `json:"id"`
+	Screenshots   []struct {
+		ID            string
+		Sexual        Sexual   `json:"sexual"`
+		Dims          [2]int   `json:"dims"`
+		URL           string   `json:"url"`
+		ThumbnailDims []int    `json:"thumbnail_dims"`
+		Thumbnail     string   `json:"thumbnail"`
+		Violence      Violence `json:"violence"`
+		Votecount     int      `json:"votecount"`
+		Release       struct {
+			ID     string `json:"id"`
+			Engine string `json:"engine,omitempty"`
+			Media  []struct {
+				Qty    int    `json:"qty"`
+				Medium string `json:"medium"`
+			} `json:"media"`
+			Minage int `json:"minage,omitempty"`
+			// yyyy-mm-dd
+			Released  string `json:"released"`
+			Gtin      string `json:"gtin,omitempty"`
+			Notes     string `json:"notes"`
+			Languages []struct {
+				Main  bool   `json:"main"`
+				Latin string `json:"latin,omitempty"`
+				Lang  string `json:"lang"`
+				Title string `json:"title"`
+				Mtl   bool   `json:"mtl"`
+			} `json:"languages"`
+			Extlinks []struct {
+				Name  string `json:"name"`
+				Label string `json:"label"`
+				ID    string `json:"id"`
+				URL   string `json:"url"`
+			} `json:"extlinks"`
+			Official  bool     `json:"official"`
+			Voiced    int      `json:"voiced"`
+			Title     string   `json:"title"`
+			Alttitle  string   `json:"alttitle,omitempty"`
+			Platforms []string `json:"platforms"`
+			Producers struct {
+				Publisher   bool `json:"publisher"`
+				Developer   bool `json:"developer"`
+				ID          string
+				Name        string
+				Aliases     []string
+				Lang        string
+				Type        string
+				Description string
+			} `json:"producers"`
+			Freeware bool `json:"freeware"`
+			HasEro   bool `json:"has_ero"`
+			Vns      struct {
+				Aliases []string `json:"aliases"`
+				Tags    struct {
+					ID          string
+					Name        string
+					Aliases     []string
+					Description string
+					Catagory    string
+					Searchable  bool
+					Applicable  bool
+					VnCount     int
+					Spoiler     Spoiler `json:"spoiler"`
+					Rating      int     `json:"rating"`
+					Lie         bool    `json:"lie"`
+				} `json:"tags"`
+				Image struct {
+					Sexual        Sexual   `json:"sexual"`
+					Dims          [2]int   `json:"dims"`
+					URL           string   `json:"url"`
+					ThumbnailDims []int    `json:"thumbnail_dims"`
+					Thumbnail     string   `json:"thumbnail"`
+					ID            string   `json:"id"`
+					Violence      Violence `json:"violence"`
+					Votecount     int      `json:"votecount"`
+				} `json:"image"`
+				Rating      int       `json:"rating,omitempty"`
+				Description string    `json:"description"`
+				Olang       string    `json:"olang"`
+				Devstatus   DevStatus `json:"devstatus"`
+				Relations   []struct {
+					RelationOfficial bool   `json:"relation_official"`
+					Relation         string `json:"relation"`
+				} `json:"relations"`
+				LengthVotes int      `json:"length_votes"`
+				Platforms   []string `json:"platforms"`
+				Titles      []struct {
+					Title    string `json:"title"`
+					Official bool   `json:"official"`
+					Main     bool   `json:"main"`
+					Lang     string `json:"lang"`
+					Latin    string `json:"latin,omitempty"`
+				} `json:"titles"`
+				Alttitle   string   `json:"alttitle,omitempty"`
+				Title      string   `json:"title"`
+				Languages  []string `json:"languages"`
+				Votecount  int      `json:"votecount"`
+				Developers []struct {
+					Aliases     []string `json:"aliases"`
+					Lang        string   `json:"lang"`
+					Type        string   `json:"type"`
+					Original    string   `json:"original,omitempty"`
+					ID          string   `json:"id"`
+					Description string   `json:"description"`
+					Name        string   `json:"name"`
+				} `json:"developers"`
+				Released      string `json:"released,omitempty"`
+				Length        int    `json:"length,omitempty"`
+				LengthMinutes int    `json:"length_minutes,omitempty"`
+				ID            string `json:"id"`
+			} `json:"vns"`
+			Catalog    string `json:"catalog,omitempty"`
+			Resolution string `json:"resolution,omitempty"`
+			Patch      bool   `json:"patch"`
+			Uncensored bool   `json:"uncensored"`
+		}
+	} `json:"screenshots,omitempty"`
 }
 type Producer struct {
 	Aliases     interface{} `json:"aliases"`
