@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/tuihub/go-vndb"
+	"github.com/anispwyn/go-vndb"
 )
 
 func TestVndb_PostUList(t *testing.T) {

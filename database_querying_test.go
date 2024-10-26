@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tuihub/go-vndb"
+	"github.com/anispwyn/go-vndb"
 )
 
 func TestVndb_Vn(t *testing.T) {

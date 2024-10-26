@@ -1,6 +1,6 @@
 package vndb_test
 
-import "github.com/tuihub/go-vndb"
+import "github.com/anispwyn/go-vndb"
 
 const TokenKey = "VNDB_TOKEN"
 

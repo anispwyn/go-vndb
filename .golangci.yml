@@ -192,7 +192,7 @@ linters-settings:
     # Default: ["standard", "default"]
     sections:
       - standard # Standard section: captures all standard packages.
-      - prefix(github.com/tuihub) # Custom section: groups all imports with the specified Prefix.
+      - prefix(github.com/anispwyn) # Custom section: groups all imports with the specified Prefix.
       - default # Default section: contains all imports that could not be matched to another section type.
       - blank # Blank section: contains all blank imports. This section is not present unless explicitly enabled.
       - dot # Dot section: contains all dot imports. This section is not present unless explicitly enabled.
