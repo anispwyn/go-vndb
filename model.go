@@ -32,12 +32,14 @@ const (
 )
 
 type Image struct {
-	URL       string   `json:"url"`
-	ID        string   `json:"id"`
-	Violence  Violence `json:"violence"`
-	Sexual    Sexual   `json:"sexual"`
-	Dims      string   `json:"dims"`
-	Votecount int      `json:"votecount"`
+	URL           string   `json:"url"`
+	ID            string   `json:"id"`
+	Violence      Violence `json:"violence"`
+	Sexual        Sexual   `json:"sexual"`
+	Dims          string   `json:"dims"`
+	Thumbnail     string   `json:"thumbnail"`
+	ThumbnailDims int      `json:"thumbnail_dims"`
+	Votecount     int      `json:"votecount"`
 }
 
 type PatchUList struct {
